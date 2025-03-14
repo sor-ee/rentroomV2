@@ -16,7 +16,7 @@
         </div>
         <div class="panel-body">
             <table>
-            <tr>
+            <tr> 
                 <td>{{ Form::label('house_number', 'บ้านเลขที่ ') }}</td>
                 <td>{{ Form::text('house_number', $roomrent->house_number, ['class' => 'form-control']) }} </td>
             </tr>
@@ -28,6 +28,10 @@
                 <td>{{ Form::label('category_id', 'ประเภท') }}</td>
                 <td>{{ Form::select('category_id', $categories, Request::old('category_id'), ['class' => 'form-control']) }} </td>
             </tr>   
+            <tr>
+                <td>{{ Form::label('room_fee', 'ค่าห้อง') }}</td>
+                <td>{{ Form::text('room_fee', $roomrent->room_fee, ['class' => 'form-control']) }} </td>
+            </tr>
             </table>
         </div>
         <div class="panel-footer">

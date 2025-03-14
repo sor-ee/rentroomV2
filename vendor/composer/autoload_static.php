@@ -36,6 +36,7 @@ class ComposerStaticInit994216291e7014ce46b218ea4318bee5
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
         'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
+        'e80562809c7194acfc550c34a01dda6b' => __DIR__ . '/..' . '/phattarachai/thaidate/src/function.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
     );
 
@@ -103,6 +104,7 @@ class ComposerStaticInit994216291e7014ce46b218ea4318bee5
             'Psr\\Container\\' => 14,
             'PhpParser\\' => 10,
             'PhpOption\\' => 10,
+            'Phattarachai\\Thaidate\\' => 22,
         ),
         'O' => 
         array (
@@ -352,6 +354,10 @@ class ComposerStaticInit994216291e7014ce46b218ea4318bee5
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
         ),
+        'Phattarachai\\Thaidate\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phattarachai/thaidate/src',
+        ),
         'Opis\\Closure\\' => 
         array (
             0 => __DIR__ . '/..' . '/opis/closure/src',
@@ -518,6 +524,7 @@ class ComposerStaticInit994216291e7014ce46b218ea4318bee5
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\RoomrentController' => __DIR__ . '/../..' . '/app/Http/Controllers/RoomrentController.php',
+        'App\\Http\\Controllers\\SettingController' => __DIR__ . '/../..' . '/app/Http/Controllers/SettingController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
@@ -3869,6 +3876,8 @@ class ComposerStaticInit994216291e7014ce46b218ea4318bee5
         'PharIo\\Version\\VersionConstraintParser' => __DIR__ . '/..' . '/phar-io/version/src/VersionConstraintParser.php',
         'PharIo\\Version\\VersionConstraintValue' => __DIR__ . '/..' . '/phar-io/version/src/VersionConstraintValue.php',
         'PharIo\\Version\\VersionNumber' => __DIR__ . '/..' . '/phar-io/version/src/VersionNumber.php',
+        'Phattarachai\\Thaidate\\Thaidate' => __DIR__ . '/..' . '/phattarachai/thaidate/src/Thaidate.php',
+        'Phattarachai\\Thaidate\\ThaidateServiceProvider' => __DIR__ . '/..' . '/phattarachai/thaidate/src/ThaidateServiceProvider.php',
         'PhpOption\\LazyOption' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/LazyOption.php',
         'PhpOption\\None' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/None.php',
         'PhpOption\\Option' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/Option.php',

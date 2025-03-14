@@ -9,7 +9,7 @@
 </style>
 <body>
     <table width="100%">
-    <tr><td colspan="2" align="center"><h3>บิลค่าเช่าห้อง</h3><h4>(Room rental bill)</h4></td></tr>
+    <tr><td colspan="2" align="center"><h3>บิลค่าเช่าห้อง</h3><h4>(Room Rental Bill)</h4></td></tr>
     <tr>
         <td align="right"><strong>เลขที่:</strong></td><td>{{ $po_no }}</td>
         {{-- <tr><td><strong>วันที่:</strong></td><td>{{ $po_date }}</td></tr> --}}
@@ -18,10 +18,17 @@
     <tr><td colspan="2" align="center"><strong>บ้านเลขที่: </strong> {{ $roomrent->house_number }} </td></tr>
     <tr><td colspan="2" align="center"><strong>หมายเลขห้อง:</strong>  {{ $roomrent->room_number }} </td></tr>
     <tr><td colspan="2" align="left"><strong>ชื่อผู้เช่า: </strong> {{ $roomrent->tanent_name }} </td></tr>
+     <?php 
+        //use Illuminate\Support\Carbon;
+        //use Phattarachai\Thaidate\ThaidateServiceProvider;
+
+        //$dates = Carbon::parse( $roomrent->date )->thaidate('l j F Y');
+    ?>
+    {{-- <tr><td colspan="2" align="left"><strong>วันที่จดบันทึก: </strong> {{ $dates }} </td></tr> --}}
     <tr><td colspan="2" align="left"><strong>วันที่จดบันทึก: </strong> {{ $roomrent->date }} </td></tr>
     <tr><td colspan="2" align="left"><strong>หมายเลขไฟ: </strong> {{ $roomrent->fire_number }} <strong>หมายเลขน้ำ: </strong> {{ $roomrent->water_number }}</td></tr>
-    <tr><td colspan="2" align="left"><strong>ค่าห้อง: </strong> {{ number_format($roomrent->room_fee,0) }} <strong>ค่าน้ำ: </strong> {{ number_format($roomrent->water_fee) }}</td></tr>
-    <tr><td colspan="2" align="left"><strong>ค่าขยะ: </strong> {{ number_format($roomrent->waste_cost) }} <strong>ค่าไฟ: </strong> {{ number_format($roomrent->electricity_fee) }}</td></tr>
+    <tr><td colspan="2" align="left"><strong>ค่าห้อง: </strong> {{ number_format($roomrent->room_fee,0) }} บาท <strong>ค่าน้ำ: </strong> {{ number_format($roomrent->water_fee) }} บาท</td></tr>
+    <tr><td colspan="2" align="left"><strong>ค่าขยะ: </strong> {{ number_format($roomrent->waste_cost) }} บาท <strong>ค่าไฟ: </strong> {{ number_format($roomrent->electricity_fee) }} บาท</td></tr>
     {{-- <tr>
     <td colspan="2">
         <table border="1" width="100%" cellspacing="0" cellpadding="0">
@@ -58,7 +65,15 @@
         <td>
             <h4>หมายเหตุ</h4>
             <ul>
-                <li>กรุณาชําระเงินภายใน 7 วัน หลังจากวันที่ {{ $po_date }}</li>
+                <li>ชําระเงินโดยโอนเข้าบัญชีธนาคาร <br><br>
+                    <h3>
+                    ธนาคารออมสิน <br>
+                    เลขที่บัญชี: 020443785819 <br> 
+                    ชื่อบัญชี: นางชาลี ทวีปะ</li></h3><br> 
+                <li>กรุณาชําระเงินตั้งแต่วันที่ 1 - 30 ของเดือน </li>
+                <b><font color=red>หากเกินวันที่ 5 ของเดือนถัดไปขออนุญาตปรับวันละ 30 บาท</font></b><br>
+                <li>ชําระเงินแล้วส่งหลักฐานการชำระเงินมาที่ไลน์กลุ่มห้องเช่ายายหล่อ </li>
+
             </ul>
         </td>
         <td align ="right"><strong>จํานวนเงินรวมทั้งสิ้น</strong> <h1>{{ number_format($roomrent->total,0) }} บาท</h1></td>

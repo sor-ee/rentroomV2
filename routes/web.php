@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomrentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CalcController;
+use App\Http\Controllers\SettingController;
 use App\Models\Roomrent;
 
 /*
@@ -35,3 +36,7 @@ Route::get('/home',[HomeController::class,'index'])->name('home');
 Route::get('/roomrent/conclude/{id?}',[RoomrentController::class,'conclude']);
 Route::post('/roomrent/updateconclude',[RoomrentController::class,'updateconclude']);
 Route::get('/roomrent/complete/{id?}',[RoomrentController::class,'complete']);
+
+Route::get('/setting', [SettingController::class,'index']);
+Route::get('/setting/edit/{id?}',[SettingController::class,'edit']);
+Route::post('/setting/update', [SettingController::class, 'update']);

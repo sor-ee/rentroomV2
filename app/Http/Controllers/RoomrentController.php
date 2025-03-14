@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Roomrent;
 use App\Models\Category;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Config;
 use Illuminate\Support\Facades\Validator;
@@ -46,15 +47,18 @@ class RoomrentController extends Controller
             'house_number' => 'required',
             'room_number' => 'required',
             'category_id' => 'required',
+            'room_fee' => 'required|numeric',
         );
         $messages = array(
-            'required' => 'กรุณากรอกข้อมูล :attribute ให้ครบถ้วน'
+            'required' => 'กรุณากรอกข้อมูล :attribute ให้ครบถ้วน','numeric' => 'กรุณากรอกข้อมูล
+            :attribute ให้เป็นตัวเลข',
         );
         $id = $request->id;
         $temp = array(
             'house_number' => $request->house_number,
             'room_number' => $request->room_number,
             'category_id' => $request-> category_id,
+            'room_fee' => $request->room_fee,
         );
         $validator = Validator::make($temp,$rules,$messages);
         if ($validator->fails()) {
@@ -66,6 +70,7 @@ class RoomrentController extends Controller
         $roomrent->house_number = $request->house_number;
         $roomrent->room_number = $request->room_number;
         $roomrent->category_id = $request->category_id;
+        $roomrent->room_fee = $request->room_fee;
         $roomrent->save();
         return redirect('roomrent')
         ->with('ok', true)
@@ -76,6 +81,7 @@ class RoomrentController extends Controller
             'house_number' => 'required',
             'room_number' => 'required',
             'category_id' => 'required',
+            'room_fee' => 'required',
         );
         $messages = array(
             'required' => 'กรุณากรอกข้อมูล : attribute ให้ครบถ้วน'
@@ -85,6 +91,7 @@ class RoomrentController extends Controller
             'house_number' => $request->house_number,
             'room_number' => $request->room_number,
             'category_id' => $request-> category_id,
+            'room_fee' => $request->room_fee,
         );
         $validator = Validator::make($temp,$rules,$messages);
         if ($validator->fails()) {
@@ -96,6 +103,7 @@ class RoomrentController extends Controller
         $roomrent->code = $request->house_number;
         $roomrent->name = $request->room_number;
         $roomrent->category_id = $request->category_id;
+        $roomrent->room_fee = $request->room_fee;
         $roomrent->save();  
         return redirect('roomrent')
         ->with('ok', true)
@@ -170,7 +178,8 @@ class RoomrentController extends Controller
     }
     public function conclude($id = null) {
         $roomrent = Roomrent::find($id);
-        return view('roomrent/conclude')->with('roomrent', $roomrent);
+        $setting = Setting::find(3);
+        return view('roomrent/conclude')->with('roomrent', $roomrent)->with('setting', $setting);
         // return redirect('roomrent/conclude/'.$id)
         // ->with('ok', true)
         // ->with('msg','บันทึกข้อมูลเรียบร้อยแล้ว');
@@ -214,6 +223,7 @@ class RoomrentController extends Controller
         $roomrent->total = $request->total;
         $roomrent->save();
         return redirect('roomrent/complete/'.$id)
+
         ->with('ok', true)
         ->with('msg','บันทึกข้อมูลเรียบร้อยแล้ว');
     }
@@ -226,7 +236,9 @@ class RoomrentController extends Controller
         $mpdf->debug = true;    
         $mpdf->WriteHTML($html_output);
         $mpdf->Output($po_no.'.pdf', 'I');
-        return $resp->withHeader("Content-type","application/pdf");
+        //$response = $this->response->withHeader('Content-type', 'application/pdf');
+        return $response->withHeader("Content-type","application/pdf");
+        // return redirect('roomrent');
         // return view('roomrent/complete', compact('roomrent','po_no','po_date'));
         }
 }   

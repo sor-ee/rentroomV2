@@ -25,6 +25,7 @@
     <ul class="nav navbar-nav">
     {{-- <li><a href="{{URL::to('home')}}">หน้าแรก</a></li> --}}
     <li><a href="{{URL::to('roomrent')}}">ข้อมูลห้องเช่า</a></li>
+    <li><a href="{{URL::to('setting/edit/3')}}">การตั้งค่า</a></li>   
     <li><a href="#">บิล</a></li>
     </ul>
     </div>

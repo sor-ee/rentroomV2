@@ -29,6 +29,10 @@
             <td>{{ Form::select('category_id', $categories, Request::old('category_id'),
             ['class' => 'form-control']) }}</td>
             </tr>
+            <tr>
+                <td>{{ Form::label('room_fee', 'ค่าห้อง ') }}</td>
+                <td>{{ Form::text('room_fee', Request::old('room_fee'), ['class' => 'form-control']) }}</td>
+            </tr>
             </table>
         </div>
         <div class="panel-footer">
