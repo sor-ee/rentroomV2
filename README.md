@@ -1,3 +1,21 @@
+### Migrate Order
+```cmd
+php artisan migrate --path=/database/migrations/2022_10_21_171444_tb_order.php 
+```
+
+### Migrate Order_Detail
+```cmd
+php artisan migrate --path=/database/migrations/2022_10_21_171455_tb_order_detail.php
+```
+### Seeder Order
+```cmd
+php artisan db:seed --class=OrderTableSeeder
+```
+
+### Seeder Order Detail
+```cmd
+php artisan db:seed --class=OrderDetailTableSeeder
+```
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
