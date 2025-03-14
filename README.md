@@ -1,20 +1,28 @@
-### Migrate Order
+### Migrate Roomrent Category
 ```cmd
-php artisan migrate --path=/database/migrations/2022_10_21_171444_tb_order.php 
+php artisan migrate --path=/database/migrations/2023_04_20_132210_create_category_table.php 
 ```
 
-### Migrate Order_Detail
+### Migrate Roomrent
 ```cmd
-php artisan migrate --path=/database/migrations/2022_10_21_171455_tb_order_detail.php
+php artisan migrate --path=/database/migrations/2023_04_20_132754_create_roomrent_table.php
 ```
-### Seeder Order
+### Migrate Roomrent setting
 ```cmd
-php artisan db:seed --class=OrderTableSeeder
+php artisan migrate --path=/database/migrations/2024_08_14_082403_create_setting_table.php
+```
+### Seeder Roomrent Category
+```cmd
+php artisan db:seed --class=CategoryTableSeeder
 ```
 
-### Seeder Order Detail
+### Seeder Roomrent 
 ```cmd
-php artisan db:seed --class=OrderDetailTableSeeder
+php artisan db:seed --class=RoomrentTableSeeder
+```
+### Seeder Roomrent setting
+```cmd
+php artisan db:seed --class=SettingTableSeeder
 ```
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
