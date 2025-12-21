@@ -10,6 +10,7 @@ use Config;
 use Illuminate\Support\Facades\Validator;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
+use Carbon\Carbon;
 
 class RoomrentController extends Controller
 {
@@ -240,5 +241,18 @@ class RoomrentController extends Controller
         return $response->withHeader("Content-type","application/pdf");
         // return redirect('roomrent');
         // return view('roomrent/complete', compact('roomrent','po_no','po_date'));
-        }
+    }
+    public function resetStatus($id) {
+    $room = RoomRent::find($id);
+    
+    // ปรับเวลา updated_at ให้ย้อนกลับไป 1 เดือน
+    // ทำให้เงื่อนไข (เดือน DB == เดือนปัจจุบัน) เป็นเท็จ ปุ่มเลือกจึงจะกลับมา
+    $room->updated_at = Carbon::now()->subMonth();
+    
+    // สำคัญ: ปิด timestamp ชั่วคราว เพื่อไม่ให้ Laravel อัปเดตเวลากลับมาเป็นปัจจุบันตอน save
+    $room->timestamps = false; 
+    $room->save();
+
+    return redirect()->back()->with('msg', 'รีเซ็ตสถานะเรียบร้อยแล้ว');
+}
 }   

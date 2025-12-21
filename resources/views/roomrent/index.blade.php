@@ -34,9 +34,42 @@
             <td>{{ $p->room_number }}</td>
             <td>{{ $p->category->name }}</td>
             <td>
-            <a href="{{URL::to('roomrent/calc/'.$p->id)}}" class="btn btn-success "><i class="fa fa-edit"></i> เลือก</a>
+                @php
+                // 1. ดึงเดือน/ปี ปัจจุบัน (เช่น 2025-12)
+                $currentMonth = date('Y-m');
+
+                // 2. ดึงเดือน/ปี จากฐานข้อมูล (วันที่แก้ไขล่าสุด)
+                // ถ้าคุณใช้วันที่จดมิเตอร์ ให้เปลี่ยน $p->updated_at เป็น $p->date
+                $dbDate = $p->updated_at ? date('Y-m', strtotime($p->updated_at)) : '';
+            @endphp
+
+            {{-- เงื่อนไข: ถ้าเดือนใน DB ตรงกับเดือนปัจจุบัน แสดงว่าคิดเงินแล้ว --}}
+            @if($dbDate == $currentMonth)
+            {{-- แสดงเครื่องหมายถูกสีเขียว --}}
+                <span class="text-success" style="font-weight: bold; margin-right: 10px;">
+                    <i class="fa fa-check-circle"></i> คำนวณแล้ว
+                </span>
+
+                {{-- ปุ่มรีเซ็ต (เผื่อคำนวณผิด อยากทำให้ปุ่มเลือกกลับมา) --}}
+                <a href="{{ URL::to('roomrent/reset-status/'.$p->id) }}" 
+                   class="btn btn-warning btn-xs" 
+                   onclick="return confirm('ต้องการรีเซ็ตสถานะห้องนี้หรือไม่?')">
+                   <i class="fa fa-refresh"></i> รีเซ็ต
+                </a>
+                
+                {{-- ปุ่มแก้ไข/ลบ ยังคงมีอยู่ --}}
+                <a href="{{URL::to('roomrent/edit/'.$p->id)}}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i>แก้ไข</a>
+                <a href="#" class="btn btn-danger btn-delete btn-xs" id-delete="{{ $p->id }}"><i class="fa fa-trash"></i>ลบ</a>
+
+            @else
+                {{-- ถ้าเดือนไม่ตรง (เป็นเดือนเก่า) แสดงปุ่มให้เลือกคำนวณ --}}
+                <a href="{{URL::to('roomrent/calc/'.$p->id)}}" class="btn btn-success"><i class="fa fa-calculator"></i> เลือก</a>
+                <a href="{{URL::to('roomrent/edit/'.$p->id)}}" class="btn btn-info"><i class="fa fa-edit"></i> แก้ไข</a>
+                <a href="#" class="btn btn-danger btn-delete" id-delete="{{ $p->id }}"><i class="fa fa-trash"></i> ลบ</a>
+            @endif
+            {{-- <a href="{{URL::to('roomrent/calc/'.$p->id)}}" class="btn btn-success "><i class="fa fa-edit"></i> เลือก</a> 
             <a href="{{URL::to('roomrent/edit/'.$p->id)}}" class="btn btn-info"><i class="fa fa-edit"></i> แก้ไข</a>
-            <a href="#" class="btn btn-danger btn-delete" id-delete="{{ $p->id }}"><i class="fa fa-trash"></i> ลบ</a>
+            <a href="#" class="btn btn-danger btn-delete" id-delete="{{ $p->id }}"><i class="fa fa-trash"></i> ลบ</a>--}}
             </td>
             
             </tr> @endforeach

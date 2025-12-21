@@ -36,6 +36,7 @@ Route::get('/home',[HomeController::class,'index'])->name('home');
 Route::get('/roomrent/conclude/{id?}',[RoomrentController::class,'conclude']);
 Route::post('/roomrent/updateconclude',[RoomrentController::class,'updateconclude']);
 Route::get('/roomrent/complete/{id?}',[RoomrentController::class,'complete']);
+Route::get('roomrent/reset-status/{id}', [RoomRentController::class, 'resetStatus']);
 
 Route::get('/setting', [SettingController::class,'index']);
 Route::get('/setting/edit/{id?}',[SettingController::class,'edit']);
