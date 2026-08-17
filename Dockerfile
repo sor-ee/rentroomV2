@@ -11,9 +11,12 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     ghostscript \
+    libjpeg-dev \
+    libfreetype6-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # ติดตั้ง PHP Extensions ที่ Laravel ต้องใช้
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 # เปิดใช้งานโหมด Rewrite ของ Apache (สำคัญสำหรับ Laravel)
