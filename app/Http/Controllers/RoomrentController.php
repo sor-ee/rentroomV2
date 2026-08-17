@@ -8,9 +8,11 @@ use App\Models\Setting;
 use Illuminate\Http\Request;
 use Config;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
 use Carbon\Carbon;
+use Imagick;
 
 class RoomrentController extends Controller
 {
@@ -101,10 +103,13 @@ class RoomrentController extends Controller
             ->withInput();
         }
         $roomrent = new Roomrent();
-        $roomrent->code = $request->house_number;
-        $roomrent->name = $request->room_number;
+        $roomrent->house_number = $request->house_number;
+        $roomrent->room_number = $request->room_number;
         $roomrent->category_id = $request->category_id;
         $roomrent->room_fee = $request->room_fee;
+        $roomrent->waste_cost = $request->waste_cost;
+        $roomrent->old_fire_number = $request->old_fire_number;
+        $roomrent->old_water_number = $request->old_water_number;
         $roomrent->save();  
         return redirect('roomrent')
         ->with('ok', true)
@@ -229,18 +234,97 @@ class RoomrentController extends Controller
         ->with('msg','บันทึกข้อมูลเรียบร้อยแล้ว');
     }
     public function complete($id = null) {
+        // 1. ดึงข้อมูล
         $roomrent = Roomrent::find($id);
         $po_no = 'RS'.date("Ymd").$roomrent->room_number.$roomrent->house_number;
         $po_date = date("d-m-Y");
+
+        // 2. สร้าง HTML
         $html_output = view('roomrent/complete', compact('roomrent','po_no','po_date'))->render();
+        
+        // 3. เตรียม mPDF
         $mpdf = new \Mpdf\Mpdf();
-        $mpdf->debug = true;    
         $mpdf->WriteHTML($html_output);
-        $mpdf->Output($po_no.'.pdf', 'I');
-        //$response = $this->response->withHeader('Content-type', 'application/pdf');
-        return $response->withHeader("Content-type","application/pdf");
-        // return redirect('roomrent');
-        // return view('roomrent/complete', compact('roomrent','po_no','po_date'));
+        
+        // 4. เตรียม Path (เหมือนเดิม)
+        $tempPath = storage_path('app/public/temp/');
+        if (!file_exists($tempPath)) mkdir($tempPath, 0777, true);
+
+        $safeName = 'temp_' . time() . '_' . Str::random(5); 
+        // แก้ Path เป็น Backslash (\) แบบ Windows
+        $pdfTempPath = str_replace('/', '\\', $tempPath . $safeName . '.pdf');
+        $jpgTempPath = str_replace('/', '\\', $tempPath . $safeName . '.jpg');
+
+        // 5. Save PDF เต็มหน้าลงเครื่องชั่วคราว
+        $mpdf->Output($pdfTempPath, 'F');
+
+        // 6. เตรียมคำสั่งเรียก Ghostscript (เช็ค Path ให้ตรงกับเครื่องคุณ!)
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+        // กรณีรันบนเครื่อง AppServ ของคุณ (Windows)
+            $gsExe = 'C:\Program Files\gs\gs10.06.0\bin\gswin64c.exe'; 
+        } else {
+            // กรณีรันบน Render หรือโฮสติ้งทั่วไป (Linux)
+        $gsExe = '/usr/bin/gs'; 
+        } 
+
+        if (file_exists($gsExe) && file_exists($pdfTempPath)) {
+            // คำสั่งแปลงไฟล์ (ได้รูปเต็มหน้ามาก่อน)
+            $command = "\"$gsExe\" -dNOPAUSE -dBATCH -sDEVICE=jpeg -r300 -sOutputFile=\"$jpgTempPath\" \"$pdfTempPath\"";
+            exec($command, $output, $returnVar);
+
+            // 7. ตรวจสอบผลลัพธ์
+            if ($returnVar === 0 && file_exists($jpgTempPath)) {
+                
+                // =========================================================
+                // ✂️ เริ่มขั้นตอนการตัดภาพ (Crop) เอาแค่ครึ่งบน ด้วย PHP GD
+                // =========================================================
+                try {
+                    // โหลดภาพเต็มหน้าที่ได้จาก Ghostscript
+                    $sourceImage = @imagecreatefromjpeg($jpgTempPath);
+                    if (!$sourceImage) throw new \Exception("ไม่สามารถอ่านไฟล์รูปภาพได้");
+
+                    // หาขนาดกว้างxสูงเดิม
+                    $width = imagesx($sourceImage);
+                    $height = imagesy($sourceImage);
+
+                    // คำนวณความสูงใหม่ (เอาแค่ครึ่งเดียว)
+                    $newHeight = floor($height / 2); 
+
+                    // สร้าง Canvas ภาพเปล่าขนาดใหม่ (กว้างเท่าเดิม สูงครึ่งเดียว)
+                    $croppedImage = imagecreatetruecolor($width, $newHeight);
+
+                    // สั่ง Copy จากภาพเดิม โดยเริ่มที่มุมซ้ายบน (0,0)
+                    // และเอามาแค่ความกว้างเต็ม ความสูงครึ่งเดียว
+                    imagecopy($croppedImage, $sourceImage, 0, 0, 0, 0, $width, $newHeight);
+
+                    // บันทึกภาพที่ตัดแล้ว ทับไฟล์เดิมลงไป (คุณภาพ 90)
+                    imagejpeg($croppedImage, $jpgTempPath, 90);
+
+                    // เคลียร์ Ram
+                    imagedestroy($sourceImage);
+                    imagedestroy($croppedImage);
+
+                } catch (\Exception $e) {
+                    // ถ้าตัดภาพไม่สำเร็จ ให้ส่งภาพเต็มไปแทน หรือ return error
+                    // return "Error Cropping: " . $e->getMessage(); 
+                }
+                // =========================================================
+                // ✂️ สิ้นสุดการตัดภาพ
+                // =========================================================
+
+
+                // ลบ PDF ต้นฉบับทิ้ง
+                @unlink($pdfTempPath);
+                
+                // ส่งไฟล์รูปที่ตัดแล้วให้ User
+                return response()->file($jpgTempPath)->deleteFileAfterSend(true);
+
+            } else {
+                return "เกิดข้อผิดพลาดในการแปลงไฟล์ (Code: $returnVar)";
+            }
+        } else {
+            return "ไม่พบโปรแกรม Ghostscript หรือหาไฟล์ PDF ไม่เจอ";
+        }
     }
     public function resetStatus($id) {
     $room = RoomRent::find($id);
@@ -254,5 +338,5 @@ class RoomrentController extends Controller
     $room->save();
 
     return redirect()->back()->with('msg', 'รีเซ็ตสถานะเรียบร้อยแล้ว');
-}
+    }
 }   

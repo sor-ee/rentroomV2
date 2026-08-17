@@ -13,7 +13,8 @@
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.4",
         "mpdf/mpdf": "^8.0",
-        "phattarachai/thaidate": "^12.1"
+        "phattarachai/thaidate": "^12.1",
+        "spatie/pdf-to-image": "^1.2"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

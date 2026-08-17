@@ -33,6 +33,18 @@
                 <td>{{ Form::label('room_fee', 'ค่าห้อง ') }}</td>
                 <td>{{ Form::text('room_fee', Request::old('room_fee'), ['class' => 'form-control']) }}</td>
             </tr>
+            <tr>
+                <td>{{ Form::label('waste_cost', 'ค่าขยะ ') }}</td>
+                <td>{{ Form::text('waste_cost', Request::old('waste_cost'), ['class' => 'form-control']) }}</td>
+            </tr>
+            <tr>
+                <td>{{ Form::label('old_fire_number', 'เลขไฟเก่า ') }}</td>
+                <td>{{ Form::text('old_fire_number', Request::old('old_fire_number'), ['class' => 'form-control']) }}</td>
+            </tr>
+            <tr>
+                <td>{{ Form::label('old_water_number', 'เลขน้ำเก่า ') }}</td>
+                <td>{{ Form::text('old_water_number', Request::old('old_water_number'), ['class' => 'form-control']) }}</td>
+            </tr>
             </table>
         </div>
         <div class="panel-footer">
