@@ -1,7 +1,9 @@
+<?php
+
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\URL; // <-- เพิ่มบรรทัดนี้
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // <-- เพิ่ม 3 บรรทัดนี้ เพื่อบังคับใช้ https บน Server จริง
+        // บังคับใช้ HTTPS เมื่ออยู่บน Server จริง
         if(config('app.env') !== 'local') {
             URL::forceScheme('https');
         }
