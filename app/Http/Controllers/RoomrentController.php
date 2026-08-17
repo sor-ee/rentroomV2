@@ -242,8 +242,15 @@ class RoomrentController extends Controller
         // 2. สร้าง HTML
         $html_output = view('roomrent/complete', compact('roomrent','po_no','po_date'))->render();
         
+        
+        $tempPath = storage_path('app/public/temp/');
+        if (!file_exists($tempPath)) {
+            mkdir($tempPath, 0777, true);
+        }
         // 3. เตรียม mPDF
-        $mpdf = new \Mpdf\Mpdf();
+        $mpdf = new \Mpdf\Mpdf([
+            'tempDir' => $tempPath
+        ]);
         $mpdf->WriteHTML($html_output);
         
         // 4. เตรียม Path (เหมือนเดิม)
