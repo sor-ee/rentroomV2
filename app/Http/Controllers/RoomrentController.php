@@ -259,8 +259,8 @@ class RoomrentController extends Controller
 
         $safeName = 'temp_' . time() . '_' . Str::random(5); 
         // แก้ Path เป็น Backslash (\) แบบ Windows
-        $pdfTempPath = str_replace('/', '\\', $tempPath . $safeName . '.pdf');
-        $jpgTempPath = str_replace('/', '\\', $tempPath . $safeName . '.jpg');
+        $pdfTempPath =  $tempPath . $safeName . '.pdf';
+        $jpgTempPath =  $tempPath . $safeName . '.jpg';
 
         // 5. Save PDF เต็มหน้าลงเครื่องชั่วคราว
         $mpdf->Output($pdfTempPath, 'F');
